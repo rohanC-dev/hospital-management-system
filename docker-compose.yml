@@ -3,14 +3,14 @@ version: "3.3"
 services:
   # MySQL
   db:
-    container_name: "patients_db"
+    container_name: "db"
 
     build: ./docker/mysql
 
     restart: always
     tty: true
     environment:
-      MYSQL_DATABASE: sample_db
+      MYSQL_DATABASE: db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
@@ -24,7 +24,7 @@ services:
       - local-net
 
   # FastAPI
-  api:
+  patients_api:
 
     links:
       - db
@@ -33,6 +33,22 @@ services:
     build: ./docker/api
     ports:
       - "8000:8000"
+    volumes:
+      - ./code:/usr/src/server
+    networks:
+      - local-net
+
+
+
+  symptoms_api:
+
+    links:
+      - db
+    container_name: "symptoms_api"
+
+    build: ./docker/symptom_api
+    ports:
+      - "8001:8001"
     volumes:
       - ./code:/usr/src/server
     networks:

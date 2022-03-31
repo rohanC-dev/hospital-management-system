@@ -11,3 +11,8 @@ CREATE TABLE room (
     occupied BOOLEAN,
     PRIMARY KEY (room_id)
 );
+
+CREATE TABLE symptom (
+    patient_id INT,
+    symptom VARCHAR(30)
+);

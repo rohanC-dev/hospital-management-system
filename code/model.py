@@ -16,6 +16,11 @@ class RoomTable(Base):
     patient_id = Column(Integer)
     occupied = Column(Boolean)
 
+class SymptomTable(Base):
+    __tablename__ = 'symptom'
+    patient_id = Column(Integer, primary_key=True)
+    symptom = Column(String)
+
 
 def main():
     Base.metadata.create_all(bind=ENGINE)

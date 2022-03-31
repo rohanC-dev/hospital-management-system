@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 user_name = "user"
 password = "password"
 host = "db"
-database_name = "sample_db"
+database_name = "db"
 
 DATABASE = 'mysql://%s:%s@%s/%s?charset=utf8' % (
     user_name,
