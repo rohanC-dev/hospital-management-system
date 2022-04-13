@@ -60,7 +60,7 @@ def assign_patient(patient_id: int, room_id: int):
         filter(RoomTable.room_id == room_id).first()
 
     if not room:
-        raise HTTPException(status_code=404, detail="Hero not found")
+        raise HTTPException(status_code=404, detail="Room not found")
 
     room.patient_id = patient_id
     room.occupied = True

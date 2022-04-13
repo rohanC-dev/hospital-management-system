@@ -39,8 +39,6 @@ services:
     networks:
       - local-net
 
-
-
   symptoms_api:
     image: "rohancdev/coe892_project:symptoms_api"
     links:
@@ -50,6 +48,20 @@ services:
     build: ./docker/symptom_api
     ports:
       - "8001:8001"
+    volumes:
+      - ./code:/usr/src/server
+    networks:
+      - local-net
+
+  operating_room_api:
+    image: "rohancdev/coe892_project:operating_room_api"
+    links:
+      - db
+    container_name: "operating_room_api"
+
+    build: ./docker/operating_room_api
+    ports:
+      - "8003:8003"
     volumes:
       - ./code:/usr/src/server
     networks:

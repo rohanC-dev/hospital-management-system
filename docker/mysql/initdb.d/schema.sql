@@ -16,3 +16,10 @@ CREATE TABLE symptom (
     patient_id INT,
     symptom VARCHAR(30)
 );
+
+CREATE TABLE operating_room (
+    room_id INT,
+    patient_id INT,
+    occupied BOOLEAN,
+    PRIMARY KEY (room_id)
+);
