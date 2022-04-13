@@ -28,8 +28,9 @@ def read_patient(patient_id: int):
 
 
 @app.post("/patient")  # create a new patient
-async def create_patient(name: str, age: int):
+async def create_patient(id: int, name: str, age: int):
     patient = PatientTable()
+    patient.id = id
     patient.name = name
     patient.age = age
     session.add(patient)

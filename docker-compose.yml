@@ -3,6 +3,7 @@ version: "3.3"
 services:
   # MySQL
   db:
+    image: "rohancdev/coe892_project:db"
     container_name: "db"
 
     build: ./docker/mysql
@@ -25,7 +26,7 @@ services:
 
   # FastAPI
   patients_api:
-
+    image: "rohancdev/coe892_project:patients_api"
     links:
       - db
     container_name: "patients_api"
@@ -41,7 +42,7 @@ services:
 
 
   symptoms_api:
-
+    image: "rohancdev/coe892_project:symptoms_api"
     links:
       - db
     container_name: "symptoms_api"
