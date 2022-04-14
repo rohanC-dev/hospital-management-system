@@ -67,6 +67,14 @@ services:
     networks:
       - local-net
 
+  frontend:
+    build: ./docker/app
+    container_name: frontend_service
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+
 networks:
   local-net:
     driver: bridge

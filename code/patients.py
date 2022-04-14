@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
-from db import session, db_session
+from db import db_session
 from model import PatientTable, RoomTable
 
 app = FastAPI()
@@ -8,7 +8,7 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -17,12 +17,12 @@ app.add_middleware(
 
 @app.get("/patients")  # get list of patients
 def read_patients():
-    return session().query(PatientTable).all()
+    return db_session.query(PatientTable).all()
 
 
 @app.get("/patient/{patient_id}")  # get a particular patient
 def read_patient(patient_id: int):
-    patient = session.query(PatientTable). \
+    patient = db_session.query(PatientTable). \
         filter(PatientTable.id == patient_id).first()
     return patient
 
@@ -33,30 +33,33 @@ async def create_patient(id: int, name: str, age: int):
     patient.id = id
     patient.name = name
     patient.age = age
-    session.add(patient)
-    session.commit()
+    db_session.add(patient)
+    db_session.commit()
     return {"Success": True}
 
 
 @app.delete("/patient/{patient_id}")  # discharge a patient
 async def delete_patient(patient_id: int):
-    patient = session.query(PatientTable). \
+    print("PATIENT_ID RECIEVED" + str(patient_id))
+    patient = db_session.query(PatientTable). \
         filter(PatientTable.id == patient_id).first()
+
+    print("PATIENT RECIEVED FROM DATABASE" + str(patient))
 
     if not patient:
         raise HTTPException(status_code=404, detail="Hero not found")
 
-    session.delete(patient)
-    session.commit()
+    db_session.delete(patient)
+    db_session.commit()
     return {"Success": True}
 
 @app.get("/rooms")  # get list of rooms
 def read_rooms():
-    return session().query(RoomTable).all()
+    return db_session.query(RoomTable).all()
 
 @app.put("/room/{room_id}") # assign patient to room
 def assign_patient(patient_id: int, room_id: int):
-    room = session.query(RoomTable). \
+    room = db_session.query(RoomTable). \
         filter(RoomTable.room_id == room_id).first()
 
     if not room:
@@ -65,7 +68,7 @@ def assign_patient(patient_id: int, room_id: int):
     room.patient_id = patient_id
     room.occupied = True
 
-    session.commit()
+    db_session.commit()
 
     return {"Success": True}
 

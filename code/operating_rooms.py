@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
-from db import session, db_session
+from db import db_session
 from model import OperatingRoomTable
 
 app = FastAPI()
@@ -17,12 +17,12 @@ app.add_middleware(
 
 @app.get("/status")  # get status of operating room
 async def get_status():
-    return session().query(OperatingRoomTable).all()
+    return db_session.query(OperatingRoomTable).all()
 
 
 @app.put("/assign_patient")  # assign a patient to operating room
 async def assign_patient(patient_id: int):
-    operating_room = session.query(OperatingRoomTable).first()
+    operating_room = db_session.query(OperatingRoomTable).first()
 
     if not operating_room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -33,14 +33,14 @@ async def assign_patient(patient_id: int):
         operating_room.patient_id = patient_id
         operating_room.occupied = True
 
-    session.commit()
+    db_session.commit()
 
     return {"Success": True}
 
 
 @app.put("/discharge_patient")  # discharge patient
 async def discharge_patient():
-    operating_room = session.query(OperatingRoomTable).first()
+    operating_room = db_session.query(OperatingRoomTable).first()
 
     if not operating_room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -48,6 +48,6 @@ async def discharge_patient():
     operating_room.patient_id = None
     operating_room.occupied = False
 
-    session.commit()
+    db_session.commit()
 
     return {"Success": True}
